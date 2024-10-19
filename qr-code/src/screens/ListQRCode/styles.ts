@@ -7,3 +7,8 @@ export const Container = styled.View`
 
   background: ${({ theme }) => theme?.colors?.background};
 `;
+
+export const ListQRCodeHeader = styled.View`
+  flex-direction: row;
+  gap: 16px;
+`;

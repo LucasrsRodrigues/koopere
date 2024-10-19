@@ -19,7 +19,8 @@ module.exports = function (api) {
             '@global': './src/global',
             '@infrastructure': './src/infrastructure',
           }
-        }
+        },
+        'react-native-reanimated/plugin'
       ],
     ]
   };

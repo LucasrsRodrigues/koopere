@@ -1,4 +1,4 @@
-package com.qrcode
+package com.lucasrs.qrcode
 
 import android.os.Build
 import android.os.Bundle

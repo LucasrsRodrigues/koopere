@@ -1,13 +1,37 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+
+import { Input } from '@components/forms/Input';
+
+import SearchIcon from "@assets/icons/search-normal.svg";
+import ScanIcon from "@assets/icons/scan.svg";
+import { CustomSafeArea } from '@components/CustomSafeArea';
+import { IconButton } from '@components/forms/IconButton';
 
 import * as S from "./styles";
-import { Input } from '../../components/forms/Input';
+import { ScanQRCode } from '@components/ScanQRCode';
 
 export function ListQRCode() {
+  const [showScanQRCode, setShowScanQRCode] = useState(false);
+
   return (
-    <S.Container>
-      <Input placeholder='Enter Receipt Number' />
-    </S.Container>
+    <CustomSafeArea>
+      <S.ListQRCodeHeader>
+        <Input
+          placeholder='Enter Receipt Number'
+          leftElement={<SearchIcon />}
+        />
+
+        <IconButton
+          onPress={() => setShowScanQRCode(true)}
+          icon={ScanIcon}
+        />
+      </S.ListQRCodeHeader>
+
+      <ScanQRCode
+        isVisible={showScanQRCode}
+        handleClose={() => setShowScanQRCode(false)}
+      />
+
+    </CustomSafeArea>
   );
 }
