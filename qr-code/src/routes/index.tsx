@@ -8,7 +8,11 @@ const { Navigator, Screen } = createNativeStackNavigator();
 export default function Routes() {
   return (
     <NavigationContainer>
-      <Navigator>
+      <Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
         <Screen name="ListQRCode" component={ListQRCode} />
         <Screen name="CreateQRCode" component={CreateQRCode} />
       </Navigator>
