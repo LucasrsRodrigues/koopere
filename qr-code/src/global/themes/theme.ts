@@ -12,6 +12,11 @@ export default {
     red: "#FF2626",
     yellow: "#FFDA0C",
     green: "#00BA81",
+
+    input: "#040404",
+    inputBorder: "#FFFFFF10",
+    inputText: "#ffffff",
+    inputPlaceholder: "#999999"
   },
   fonts: {}
 }
