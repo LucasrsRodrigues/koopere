@@ -1,0 +1,5 @@
+class CreateUserUseCase {
+  async execute() {
+    
+  }
+}

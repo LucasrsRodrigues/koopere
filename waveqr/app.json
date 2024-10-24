@@ -1,0 +1,53 @@
+{
+	"expo": {
+		"name": "waveqr",
+		"slug": "waveqr",
+		"version": "1.0.0",
+		"icon": "./assets/images/icon.png",
+		"splash": {
+			"image": "./assets/images/splash.png",
+			"resize": "contain",
+			"backgroundColor": "#040404"
+		},
+		"plugins": [
+			"expo-font",
+			"react-native-vision-camera",
+			[
+				"react-native-vision-camera",
+				{
+					"cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera.",
+					"enableCodeScanner": true
+				}
+			],
+			[
+				"expo-location",
+				{
+					"locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+				}
+			]
+		],
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/images/adaptive-icon.png",
+				"backgroundColor": "#040404"
+			},
+			"permissions": ["android.permission.CAMERA"],
+			"package": "com.lucasrs.waveqr"
+		},
+		"ios": {
+			"infoPlist": {
+				"NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera"
+			},
+			"bundleIdentifier": "com.lucasrs.waveqr"
+		},
+		"extra": {
+			"eas": {
+				"projectId": "28134513-e459-4473-9ad5-e80771ff3925"
+			}
+		},
+		"runtimeVersion": "1.0.0",
+		"updates": {
+			"url": "https://u.expo.dev/1d520f1e-580c-4b34-bb85-d5a1b325b29e"
+		}
+	}
+}

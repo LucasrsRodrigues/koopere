@@ -1,0 +1,12 @@
+### Variables 
+@apiurl = http://localhost:3333
+
+### POST users
+POST {{apiurl}}/users
+Content-Type: application/json
+
+{
+   "username":"Lorem ipsum",
+   "email":"lorem@ipsum.com",
+   "password":"Sennha123"
+}
