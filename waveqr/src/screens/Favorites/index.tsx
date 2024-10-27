@@ -47,7 +47,6 @@ export function Favorites() {
             index={index}
           />
         ))}
-
         {favorites.length === 0 && (
           <S.HistoryNotFoundContainer>
             <AntDesign 

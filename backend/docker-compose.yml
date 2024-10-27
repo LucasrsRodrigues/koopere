@@ -1,0 +1,29 @@
+services:
+  database_waveqr:
+    image: postgres
+    container_name: database_waveqr
+    restart: always
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - pgdata:/data/postgres
+
+  app:
+    build: .
+    container_name: waveqr
+    ports:
+      - "${PORT}:3333"
+    volumes:
+      - .:/usr/app
+    links:
+      - database_waveqr
+    depends_on:
+      - database_waveqr
+
+volumes:
+  pgdata:
+    driver: local

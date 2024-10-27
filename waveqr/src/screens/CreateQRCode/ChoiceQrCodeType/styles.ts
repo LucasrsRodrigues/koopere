@@ -16,7 +16,7 @@ export const SessionTitle = styled.Text`
 export const ListQrCodeOptions = styled.ScrollView.attrs({
   contentContainerStyle: {
     gap: 15,
-    paddingBottom: 30
+    paddingBottom: 100
   },
   showsVerticalScrollIndicator: false
 })`

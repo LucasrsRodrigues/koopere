@@ -7,6 +7,25 @@ Content-Type: application/json
 
 {
    "username":"Lorem ipsum",
+   "name": "Lucas Rodrigues Santos",
    "email":"lorem@ipsum.com",
    "password":"Sennha123"
 }
+
+### POST login
+POST {{apiurl}}/sessions
+Content-Type: application/json
+
+{
+   "email":"lorem@ipsum.com",
+   "password":"Sennha123"
+}
+
+### POST listagem de emvs
+GET {{apiurl}}/emv
+Content-Type: application/json
+
+
+### GET
+GET {{apiurl}}/sync
+Content-Type: application/json

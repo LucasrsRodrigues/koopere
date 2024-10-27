@@ -2,7 +2,7 @@ import type { FC } from "react";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type IShowQrCodeParams = {
-	id: string;
+	id?: string;
 	emv: string;
 	type: string;
 };

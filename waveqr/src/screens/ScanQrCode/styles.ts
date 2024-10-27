@@ -18,6 +18,7 @@ export const CameraIn = styled.View`
 
 export const CameraInHeader = styled.View`
   padding: 20px;
+  margin-top: 20px;
 `;
 
 export const CameraInHeaderText = styled.Text`

@@ -65,3 +65,14 @@ export const HistoryList = styled.ScrollView.attrs({
 })`
   margin-top: 20px;
 `;
+
+export const HistoryNotFoundContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const HistoryNotFoundText = styled.Text`
+  font-size: 20px;
+  color: ${({ theme }) => theme?.colors?.text};
+`;

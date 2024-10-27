@@ -24,6 +24,8 @@ export const QRCodeType = styled.Text`
   font-size: 20px;
   color: ${({ theme }) => theme?.colors?.primary};
   text-align: center;
+  font-family: ${({ theme }) => theme.fonts.primary_500};
+  text-transform: uppercase;
 `;
 
 

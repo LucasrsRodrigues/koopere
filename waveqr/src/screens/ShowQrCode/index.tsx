@@ -67,6 +67,12 @@ export function ShowQrCode() {
 
 	async function fetchData() {
 		try {
+console.log(params)
+			if(params?.id === undefined) {
+				setQRCodeInfo(params?.emv);
+				setIsFavourite(false);
+				return
+			}
 			const dataInfo = await EmvsRepository.getInfo(params?.id);
 			setQRCodeInfo(dataInfo);
 			setIsFavourite(dataInfo?.isFavourite);
@@ -115,7 +121,7 @@ export function ShowQrCode() {
 			</S.ShowQrCodeHeader>
 
 			<S.ShowQRCodeBody>
-				<S.QRCodeType>Local na rede Internet</S.QRCodeType>
+				<S.QRCodeType>{params?.type}</S.QRCodeType>
 
 				<ViewShot
 					ref={viewShotRef}
@@ -156,7 +162,7 @@ export function ShowQrCode() {
 					</S.QRCodeEMVLink>
 				</S.QRCodeEMVLinkButton>
 			) : (
-				<S.QRCodeEMV>{qrCodeInfo?.value}</S.QRCodeEMV>
+				<S.QRCodeEMV>{qrCodeInfo?.value || params?.emv}</S.QRCodeEMV>
 			)}
 
 			<ModalOptions

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import * as S from "./styles";
 import {
@@ -10,16 +10,48 @@ import {
 import { StyleSheet } from "react-native";
 import { PermissionsScreen } from "./components/PermissionsScreen";
 import { DeviceScreen } from "./components/DeviceScreen";
+import Toast from "react-native-toast-message";
+import useTypeSafeNavigation from "@hooks/navigation/useTypeSafeNavigation";
 
 export function ScanQrCode() {
 	const cameraRef = useRef<Camera>(null);
+	const { navigate } = useTypeSafeNavigation();
 	const device = useCameraDevice("back");
+	const [isFlashOn, setIsFlashOn] = useState(false);
+
 	const { hasPermission, requestPermission } = useCameraPermission();
 
 	const codeScanner = useCodeScanner({
 		codeTypes: ["qr", "ean-13"],
-		onCodeScanned: (codes) => {},
+		onCodeScanned: (codes) => {
+			const code = codes[0];
+			navigate("ShowQrCode", {
+				emv: code.value,
+				type: "text"
+			});
+		},
 	});
+
+
+	function handleToggleFlash() {
+		if(device?.hasTorch === false) {
+			Toast.show({
+				type: "error",
+				text1: "O Flash não foi localizado."
+			});
+			return;
+		};
+
+		if(device?.position === "front") {
+			Toast.show({
+				type: "error",
+				text1: "Utilize a câmera traseira do celular para utilizar o flash."
+			});
+			return;
+		}
+		
+		setIsFlashOn(prev => !prev);
+	}
 
 	if (!hasPermission) {
 		return <PermissionsScreen />;
@@ -37,21 +69,20 @@ export function ScanQrCode() {
 				isActive={true}
 				resizeMode="cover"
 				codeScanner={codeScanner}
+				torch={isFlashOn ? "on" : "off"}
 			/>
 
 			<S.CameraIn>
 				<S.CameraInHeader>
-					<S.CameraInHeaderText>Scan Qr Code</S.CameraInHeaderText>
+					<S.CameraInHeaderText>
+						Aponte a sua câmera para o QR Code
+					</S.CameraInHeaderText>
 				</S.CameraInHeader>
 
 				<S.Scan />
 
 				<S.FooterScan>
-					<S.Button onPress={() => {}}>
-						<S.GoBack />
-					</S.Button>
-
-					<S.Button onPress={() => {}}>
+					<S.Button onPress={handleToggleFlash}>
 						<S.Flash />
 					</S.Button>
 				</S.FooterScan>

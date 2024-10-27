@@ -1,5 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import type { IUsersRepository } from "../../repositories/IUsersRepository";
+import { AppError } from "../../../../errors/AppError";
+import { verify } from "argon2";
+import { sign } from "jsonwebtoken";
 
 interface IRequest {
 	email: string;
@@ -17,23 +20,34 @@ interface IResponse {
 @injectable()
 class AuthenticateUserUseCase {
 	constructor(
-    @inject("UsersRepository")
-    private usersRepository: IUsersRepository
-  ){}
+		@inject("UsersRepository")
+		private usersRepository: IUsersRepository,
+	) {}
 
 	async execute({ email, password }: IRequest): Promise<IResponse> {
-    const user = await this.usersRepository.findByEmail(email);
+		const user = await this.usersRepository.findByEmail(email);
 
-    if (!user) {
-      throw new Error("Email or Password incorrect!");
-    }
+		if (!user) {
+			throw new AppError("Email or Password incorrect!");
+		}
+
+		const passwordMatch = await verify(user.password, password);
+
+		if (!passwordMatch) {
+			throw new AppError("Email or Password incorrect!");
+		}
+
+		const token = sign({}, process.env.JWT_SECRET, {
+			subject: user.id,
+			expiresIn: "1d",
+		});
 
 		return {
 			user: {
-				username: "",
+				username: user.username,
 				email: email,
 			},
-			token: "",
+			token,
 		};
 	}
 }
