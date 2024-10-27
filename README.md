@@ -1,5 +1,5 @@
 
-# waveqr
+# WeaveQR
 
 Este projeto é uma aplicação que utiliza um backend construído com **Express**, **TypeORM** e **PostgreSQL**, além de um frontend em **React Native** com **Expo**.
 
@@ -7,67 +7,61 @@ Este projeto é uma aplicação que utiliza um backend construído com **Express
 
 Antes de começar, verifique se você possui os seguintes pré-requisitos:
 
+- Docker e Docker Compose instalados
 - Node.js (versão 14 ou superior)
 - npm ou yarn
-- PostgreSQL instalado e em execução
 - Expo CLI (se não estiver instalado, use `npm install -g expo-cli`)
 
 ## Estrutura do Projeto
 
 ```
-/waveqr
+/weaveqr
 |-- /backend     # Código do backend
 |-- /frontend    # Código do frontend
+|-- docker-compose.yml # Configuração do Docker
 ```
 
-## Backend
+## Configuração do Docker
 
-### Configuração do Banco de Dados
+### Docker Compose
 
-1. **Crie um banco de dados** no PostgreSQL. Você pode usar um comando SQL como:
+O projeto utiliza o Docker Compose para gerenciar os containers do backend e do banco de dados. O arquivo `docker-compose.yml` deve estar na raiz do seu projeto. Exemplo de configuração:
 
-   ```sql
-   CREATE DATABASE meu_banco_de_dados;
-   ```
+```yaml
+version: '3.8'
 
-2. **Configure as credenciais** do banco de dados no arquivo de configuração do TypeORM, que geralmente está localizado em `backend/src/data-source.ts`. Exemplo de configuração:
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: seu_usuario
+      POSTGRES_PASSWORD: sua_senha
+      POSTGRES_DB: meu_banco_de_dados
+    ports:
+      - "5432:5432"
 
-   ```typescript
-   import { DataSource } from "typeorm";
+  backend:
+    build:
+      context: ./backend
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://seu_usuario:sua_senha@db:5432/meu_banco_de_dados
+```
 
-   export const AppDataSource = new DataSource({
-     type: "postgres",
-     host: "localhost",
-     port: 5432,
-     username: "seu_usuario",
-     password: "sua_senha",
-     database: "meu_banco_de_dados",
-     entities: ["src/entities/*.ts"],
-     synchronize: true,
-   });
-   ```
+### Rodando o Projeto
 
-### Rodando o Backend
+1. **Inicie os containers**:
 
-1. Navegue até a pasta do backend:
-
-   ```bash
-   cd backend
-   ```
-
-2. Instale as dependências:
-
-   ```bash
-   npm install
-   ```
-
-3. Execute a aplicação:
+   Na raiz do projeto, execute:
 
    ```bash
-   npm run start
+   docker-compose up --build
    ```
 
-O backend deve estar em execução na porta padrão (geralmente `3000`).
+   Isso criará e iniciará os containers do banco de dados e do backend. O backend estará disponível na porta `3000`.
 
 ## Frontend
 
