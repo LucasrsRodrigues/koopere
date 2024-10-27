@@ -15,7 +15,7 @@ Antes de começar, verifique se você possui os seguintes pré-requisitos:
 ## Estrutura do Projeto
 
 ```
-/meu-projeto
+/waveqr
 |-- /backend     # Código do backend
 |-- /frontend    # Código do frontend
 ```
