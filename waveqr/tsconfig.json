@@ -37,7 +37,9 @@
       "@backend/*": [
         "./src/backend/*"
       ],
-    }
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   },
   "extends": "expo/tsconfig.base"
 }

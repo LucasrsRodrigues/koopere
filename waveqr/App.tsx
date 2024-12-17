@@ -33,21 +33,19 @@ export default function App() {
 		Inter_900Black,
 		RedHatDisplay_400Regular,
 	});
-// 
 
-  const startSync = async () => {
-    try {
-      await syncDatabase(database);
-      console.log("Database synchronized successfully.");
-    } catch (error) {
-      
-      console.error("Error during database synchronization:", error);
-    }
-  };
+	const startSync = async () => {
+		try {
+			await syncDatabase(database);
+			console.log("Database synchronized successfully.");
+		} catch (error) {
+			console.error("Error during database synchronization:", error);
+		}
+	};
 
-  useEffect(() => {
-    startSync();
-  }, [database]);
+	useEffect(() => {
+		startSync();
+	}, [database]);
 
 	return (
 		<ThemeProvider theme={theme}>

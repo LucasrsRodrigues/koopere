@@ -18,6 +18,12 @@ export class Qrcode {
 	@Column()
 	type!: string;
 
+	@Column()
+	isFavourite!: boolean;
+
+	@Column()
+	isActive!: boolean;
+
 	@CreateDateColumn()
 	created_at!: Date;
 

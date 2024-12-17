@@ -9,9 +9,7 @@ interface IEmvHTTPService {
 
 const EmvHTTPService: IEmvHTTPService = {
 	pullChanges: (lastPulledAt): Promise<AxiosPromise> => {
-		return api.get("/sync?lastPulledAt", {
-			params: lastPulledAt,
-		});
+		return api.get(`/sync?lastPulledAt=${lastPulledAt}`);
 	},
 	pushChanges: (changes: SyncDatabaseChangeSet): Promise<AxiosPromise> => {
 		return api.post("/sync", { changes });

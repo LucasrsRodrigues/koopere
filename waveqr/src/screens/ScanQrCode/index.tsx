@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import * as S from "./styles";
 import {
-	 Camera,
+	Camera,
 	useCameraDevice,
 	useCameraPermission,
 	useCodeScanner,
@@ -27,30 +27,29 @@ export function ScanQrCode() {
 			const code = codes[0];
 			navigate("ShowQrCode", {
 				emv: code.value,
-				type: "text"
+				type: "text",
 			});
 		},
 	});
 
-
 	function handleToggleFlash() {
-		if(device?.hasTorch === false) {
+		if (device?.hasTorch === false) {
 			Toast.show({
 				type: "error",
-				text1: "O Flash não foi localizado."
-			});
-			return;
-		};
-
-		if(device?.position === "front") {
-			Toast.show({
-				type: "error",
-				text1: "Utilize a câmera traseira do celular para utilizar o flash."
+				text1: "O Flash não foi localizado.",
 			});
 			return;
 		}
-		
-		setIsFlashOn(prev => !prev);
+
+		if (device?.position === "front") {
+			Toast.show({
+				type: "error",
+				text1: "Utilize a câmera traseira do celular para utilizar o flash.",
+			});
+			return;
+		}
+
+		setIsFlashOn((prev) => !prev);
 	}
 
 	if (!hasPermission) {

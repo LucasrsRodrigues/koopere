@@ -1,13 +1,16 @@
 import { inject, injectable } from "tsyringe";
-import type { ISyncRepository } from "../../repositories/ISyncRepository";
 import type { IQrCodeRepository } from "../../../qrcode/repositories/IQrCodeRepository";
 import type { Qrcode } from "../../../../entities/Qrcode";
 import { AppError } from "../../../../errors/AppError";
 
+interface IQrcodeChanges {
+	created: Array<Qrcode>;
+	updated: Array<Qrcode & { _changed?: string }>;
+	deleted: Array<Qrcode>;
+}
+
 interface IRequest {
-	changes: {
-		emvs: Array<Qrcode>;
-	};
+	emvs: IQrcodeChanges;
 }
 
 @injectable()
@@ -17,23 +20,45 @@ class ReciveToClientUseCase {
 		private qrcodeRepository: IQrCodeRepository,
 	) {}
 
-	async execute({ changes }: IRequest): Promise<void> {
+	async execute({ emvs }: IRequest): Promise<void> {
 		try {
-			for (const emv of changes.emvs) {
-				const existingEmv = await this.qrcodeRepository.findById(emv.id);
+			for (const qrcode of emvs.created) {
+				await this.qrcodeRepository.create(qrcode);
+			}
 
-				if (existingEmv) {
-					existingEmv.value = emv.value;
-					existingEmv.type = emv.type;
-					existingEmv.updated_at = emv.updated_at;
+			for (const qrcode of emvs.updated) {
+				const existingQrcode = await this.qrcodeRepository.findById(qrcode.id);
 
-					await this.qrcodeRepository.update(emv.id, existingEmv);
-				} else {
-					await this.qrcodeRepository.create(emv);
+				if (!existingQrcode) {
+					throw new AppError(`QR Code with id ${qrcode.id} not found`);
 				}
+
+				const changedFields = qrcode._changed?.split(",") || [];
+				const updateData: Partial<Qrcode> = {};
+
+				updateData.value = qrcode.value;
+				updateData.type = qrcode.type;
+				updateData.updated_at = qrcode.updated_at;
+
+				if (changedFields.includes("isFavourite")) {
+					updateData.isFavourite = qrcode.isFavourite;
+				}
+
+				if (changedFields.includes("isActive")) {
+					updateData.isActive = qrcode.isActive;
+				}
+
+				await this.qrcodeRepository.update(qrcode.id, updateData);
+			}
+
+			// Handle deleted items
+			for (const qrcode of emvs.deleted) {
+				await this.qrcodeRepository.delete(qrcode.id);
 			}
 		} catch (error) {
-			throw new AppError(error?.message ?? "Sync Error");
+			throw new AppError(
+				error instanceof AppError ? error.message : "Sync Error",
+			);
 		}
 	}
 }

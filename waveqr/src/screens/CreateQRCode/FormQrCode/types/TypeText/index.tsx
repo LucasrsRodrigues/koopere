@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ControlledTextArea } from "@components/controlled/ControlledTextArea";
 import { Keyboard } from "@components/Keyboard";
 import { Button } from "@components/forms/Button";
+import { database, emvsCollection } from "@backend/database";
 
 type ITypeTextProps = {
 	onGlobalSubmit: (data: IGeralSubmitDTO) => void;
@@ -20,13 +21,12 @@ const schema = Yup.object().shape({
 type FormData = Yup.InferType<typeof schema>;
 
 export function TypeText({ onGlobalSubmit }: ITypeTextProps) {
-  const [showButtonSubmit, setShowButtonSubmit] = useState(false);
+	const [showButtonSubmit, setShowButtonSubmit] = useState(false);
 
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(schema),
 	});
-
-  const onSubmit = (data: FormData) => {
+	const onSubmit = async (data: FormData) => {
 		onGlobalSubmit({
 			emv: data?.text,
 		});
@@ -42,16 +42,14 @@ export function TypeText({ onGlobalSubmit }: ITypeTextProps) {
 						control={control}
 						name="text"
 						placeholder="Inserir texto *"
-            onBlur={() => setShowButtonSubmit(true)}
+						onBlur={() => setShowButtonSubmit(true)}
 					/>
 				</S.Line>
 
-        {showButtonSubmit && (
+				{showButtonSubmit && (
 					<Button label="Gerar" onPress={handleSubmit(onSubmit)} />
 				)}
 			</Keyboard>
-
-     
 		</S.Container>
 	);
 }

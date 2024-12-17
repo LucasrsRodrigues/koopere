@@ -22,6 +22,10 @@ export function History() {
 			(async () => {
 				const response = await EmvsRepository.read();
 
+				console.log("---> response");
+				console.log(response);
+				console.log("---> response");
+
 				setHistories(response);
 			})();
 		}, []),

@@ -1,33 +1,37 @@
-import { database } from "@backend/database";
+import { database, emvsCollection } from "@backend/database";
 import type { EmvModel } from "@backend/database/models/emvModel";
 import { Q } from "@nozbe/watermelondb";
 
 interface ICreateEmvsDTO {
 	value: string;
 	type: string;
+	isFavourite?: boolean;
+	isActive?: boolean;
 }
-
 const EmvsRepository = {
-	create: async ({ value, type }: ICreateEmvsDTO): Promise<EmvModel> => {
+	create: async ({
+		value,
+		type,
+		isFavourite = false,
+		isActive = true,
+	}: ICreateEmvsDTO): Promise<EmvModel> => {
 		return await database.write(async () => {
-			return await database.get<EmvModel>("emvs").create((data) => {
-				(data.value = value), (data.type = type), (data.isFavourite = false);
+			return await emvsCollection.create((emv) => {
+				emv.value = value;
+				emv.type = type;
+				emv.isActive = isActive;
+				emv.isFavourite = isFavourite;
 			});
 		});
 	},
 	read: async (): Promise<EmvModel[]> => {
-		const emvsCollection = database.get<EmvModel>("emvs");
-
 		const response = await emvsCollection.query().fetch();
 		return response;
 	},
 	getInfo: async (id: string): Promise<EmvModel> => {
-		const emvsCollection = database.get<EmvModel>("emvs");
-
 		return await emvsCollection.find(id);
 	},
 	getFavourites: async (): Promise<EmvModel[]> => {
-		const emvsCollection = database.get<EmvModel>("emvs");
 		const response = await emvsCollection
 			.query(Q.where("isFavourite", true))
 			.fetch();
@@ -37,8 +41,6 @@ const EmvsRepository = {
 	addToFavorites: async (id: string): Promise<false | EmvModel> => {
 		try {
 			const response = await database.write(async () => {
-				const emvsCollection = await database.get<EmvModel>("emvs");
-
 				const finded = await emvsCollection.find(id);
 
 				const updated = await finded.update(() => {

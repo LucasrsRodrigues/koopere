@@ -11,6 +11,10 @@ export class QrCodeRepository implements IQrCodeRepository {
 		this.repository = AppDataSource.getRepository(Qrcode);
 	}
 
+	createMany(data: ICreateQrCodeDTO[]): Promise<Qrcode> {
+		throw new Error("Method not implemented.");
+	}
+
 	async update(id: string, data: Qrcode): Promise<Qrcode | null> {
 		this.repository.update(id, data);
 
@@ -33,10 +37,17 @@ export class QrCodeRepository implements IQrCodeRepository {
 		});
 	}
 
-	async create({ type, value }: ICreateQrCodeDTO): Promise<Qrcode> {
+	async create({
+		type,
+		value,
+		isActive = true,
+		isFavourite = false,
+	}: ICreateQrCodeDTO): Promise<Qrcode> {
 		const emv = this.repository.create({
 			type,
 			value,
+			isActive,
+			isFavourite,
 		});
 		return await this.repository.save(emv);
 	}
@@ -47,5 +58,9 @@ export class QrCodeRepository implements IQrCodeRepository {
 				id,
 			},
 		});
+	}
+
+	async delete(id: string): Promise<void> {
+		await this.repository.delete(id);
 	}
 }

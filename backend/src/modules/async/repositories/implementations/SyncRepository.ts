@@ -14,19 +14,14 @@ export class SyncRepository implements ISyncRepository {
 	}
 
 	async sendToClient(lastPulledAt: number): Promise<Qrcode[]> {
-		console.log("---sendToClient");
-		console.log(lastPulledAt);
-		console.log("---sendToClient");
+		const lastPulledDate = lastPulledAt ? new Date(lastPulledAt) : null;
+
 		const updatedEmvs = await this.repository
 			.createQueryBuilder()
-			.where(lastPulledAt ? "updatedAt > :lastPulledAt" : "1=1", {
-				lastPulledAt,
+			.where(lastPulledDate ? "updated_at > :lastPulledDate" : "1=1", {
+				lastPulledDate,
 			})
 			.getMany();
-
-		console.log(">>>>>>");
-		console.log(updatedEmvs);
-		console.log(">>>>>>");
 
 		return updatedEmvs;
 	}

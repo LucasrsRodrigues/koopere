@@ -12,17 +12,21 @@ export const emvSchema = tableSchema({
 			type: "string",
 		},
 		{
+			name: "isFavourite",
+			type: "boolean",
+		},
+		{
 			name: "isActive",
 			type: "boolean",
 			isOptional: true,
-		}, // Campo isActive adicionado
+		},
 		{
 			name: "created_at",
-			type: "number", // Se for uma string representando uma data, ou ajuste conforme necessário
+			type: "number",
 		},
 		{
 			name: "updated_at",
-			type: "number", // O mesmo aqui
+			type: "number",
 		},
 	],
 });

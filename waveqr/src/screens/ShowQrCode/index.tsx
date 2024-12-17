@@ -22,6 +22,8 @@ import useTypeSafeNavigation from "@hooks/navigation/useTypeSafeNavigation";
 import useTypeSafeRoute from "@hooks/navigation/useTypeSafeRoute";
 import type { EmvModel } from "@backend/database/models/emvModel";
 import ModalOptions from "./components/ModalOptions";
+import { database } from "@backend/database";
+import { syncDatabase } from "@backend/database/sync";
 
 const isLink = [
 	"link",
@@ -67,15 +69,17 @@ export function ShowQrCode() {
 
 	async function fetchData() {
 		try {
-console.log(params)
-			if(params?.id === undefined) {
+			if (params?.id === undefined) {
 				setQRCodeInfo(params?.emv);
 				setIsFavourite(false);
-				return
+				return;
 			}
+
 			const dataInfo = await EmvsRepository.getInfo(params?.id);
+
 			setQRCodeInfo(dataInfo);
 			setIsFavourite(dataInfo?.isFavourite);
+			await syncDatabase(database);
 		} catch (error) {
 			console.log(error);
 		}
@@ -96,10 +100,8 @@ console.log(params)
 			navigate("WebView", {
 				url: `http://www.google.com.br/search?q=${qrCodeInfo?.value}`,
 			});
-		} catch (error) {
-			
-		}
-	}
+		} catch (error) {}
+	};
 
 	async function takeScreenshot() {
 		const uri = await viewShotRef.current?.capture();

@@ -8,7 +8,7 @@ class ReciveToClientController {
 
 		const reciveToClientUseCase = container.resolve(ReciveToClientUseCase);
 
-		reciveToClientUseCase.execute(changes);
+		await reciveToClientUseCase.execute(changes);
 
 		return response.status(201).send();
 	}
